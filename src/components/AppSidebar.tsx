@@ -1,5 +1,6 @@
-import { BookOpen, LayoutDashboard, Users, BookCopy, CalendarClock, DollarSign, BarChart3, Settings, Search } from "lucide-react";
+import { BookOpen, LayoutDashboard, Users, BookCopy, CalendarClock, DollarSign, BarChart3, Settings, Search, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", active: true },
@@ -14,6 +15,7 @@ const navItems = [
 
 const AppSidebar = () => {
   const [activeItem, setActiveItem] = useState("Dashboard");
+  const { signOut } = useAuth();
 
   return (
     <aside className="w-64 min-h-screen bg-sidebar text-sidebar-foreground flex flex-col">
@@ -24,7 +26,7 @@ const AppSidebar = () => {
           </div>
           <div>
             <h1 className="text-base font-display font-semibold text-sidebar-foreground">Athenaeum</h1>
-            <p className="text-xs text-sidebar-foreground/50">Library System</p>
+            <p className="text-xs text-sidebar-foreground/50">Admin Panel</p>
           </div>
         </div>
       </div>
@@ -53,13 +55,23 @@ const AppSidebar = () => {
         ))}
       </nav>
 
-      <div className="p-4 mx-3 mb-4 rounded-lg bg-sidebar-accent">
+      <div className="p-4 mx-3 mb-2 rounded-lg bg-sidebar-accent">
         <p className="text-xs font-semibold text-sidebar-primary mb-1">System Status</p>
         <p className="text-xs text-sidebar-foreground/60">All services operational</p>
         <div className="flex items-center gap-1.5 mt-2">
           <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
           <span className="text-xs text-sidebar-foreground/50">Online</span>
         </div>
+      </div>
+
+      <div className="p-3">
+        <button
+          onClick={signOut}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors"
+        >
+          <LogOut className="w-[18px] h-[18px]" />
+          Sign Out
+        </button>
       </div>
     </aside>
   );

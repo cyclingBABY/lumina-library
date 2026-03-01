@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { books, categories } from "@/lib/mock-data";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -7,17 +7,28 @@ const statusStyles: Record<string, string> = {
   available: "bg-success/10 text-success border-success/20",
   "checked-out": "bg-info/10 text-info border-info/20",
   reserved: "bg-warning/10 text-warning border-warning/20",
-  overdue: "bg-destructive/10 text-destructive border-destructive/20",
 };
 
 const BookCatalog = () => {
+  const [books, setBooks] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [categories, setCategories] = useState<string[]>(["All"]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const { data } = await supabase.from("books").select("*").order("title");
+      if (data) {
+        setBooks(data);
+        const cats = ["All", ...new Set(data.map((b: any) => b.category))];
+        setCategories(cats);
+      }
+    };
+    fetchBooks();
+  }, []);
 
   const filtered = books.filter((b) => {
-    const matchesSearch =
-      b.title.toLowerCase().includes(search.toLowerCase()) ||
-      b.author.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase());
     const matchesCat = activeCategory === "All" || b.category === activeCategory;
     return matchesSearch && matchesCat;
   });
@@ -44,9 +55,7 @@ const BookCatalog = () => {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                activeCategory === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                activeCategory === cat ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
               }`}
             >
               {cat}
@@ -71,10 +80,7 @@ const BookCatalog = () => {
               <tr key={book.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                 <td className="px-5 py-3.5">
                   <div className="flex items-center gap-3">
-                    <div
-                      className="w-8 h-11 rounded-sm flex-shrink-0 shadow-sm"
-                      style={{ backgroundColor: book.coverColor }}
-                    />
+                    <div className="w-8 h-11 rounded-sm flex-shrink-0 shadow-sm" style={{ backgroundColor: book.cover_color || "hsl(210 60% 50%)" }} />
                     <div>
                       <p className="font-medium">{book.title}</p>
                       <p className="text-xs text-muted-foreground md:hidden">{book.author}</p>
@@ -82,15 +88,13 @@ const BookCatalog = () => {
                   </div>
                 </td>
                 <td className="px-5 py-3.5 text-muted-foreground hidden md:table-cell">{book.author}</td>
-                <td className="px-5 py-3.5 hidden lg:table-cell">
-                  <span className="text-muted-foreground">{book.category}</span>
-                </td>
+                <td className="px-5 py-3.5 hidden lg:table-cell"><span className="text-muted-foreground">{book.category}</span></td>
                 <td className="px-5 py-3.5">
-                  <Badge variant="outline" className={`text-xs capitalize ${statusStyles[book.status]}`}>
+                  <Badge variant="outline" className={`text-xs capitalize ${statusStyles[book.status] || ""}`}>
                     {book.status.replace("-", " ")}
                   </Badge>
                 </td>
-                <td className="px-5 py-3.5 text-right text-muted-foreground hidden sm:table-cell">{book.copies}</td>
+                <td className="px-5 py-3.5 text-right text-muted-foreground hidden sm:table-cell">{book.available_copies}/{book.total_copies}</td>
               </tr>
             ))}
           </tbody>

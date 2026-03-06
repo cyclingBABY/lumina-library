@@ -4,7 +4,7 @@ import type { User } from "@supabase/supabase-js";
 
 interface AuthContext {
   user: User | null;
-  role: "admin" | "patron" | null;
+  role: "admin" | "patron" | "lecturer" | null;
   loading: boolean;
   signOut: () => Promise<void>;
 }

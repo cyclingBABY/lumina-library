@@ -36,13 +36,28 @@ const steps = [
 
 const Landing = () => {
   const [books, setBooks] = useState<any[]>([]);
+  const [allBooks, setAllBooks] = useState<any[]>([]);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [bookSlideOffset, setBookSlideOffset] = useState(0);
 
   useEffect(() => {
     supabase.from("books").select("*").limit(4).then(({ data }) => {
       if (data) setBooks(data);
     });
+    // Fetch more books for the showcase slider
+    supabase.from("books").select("*").order("created_at", { ascending: false }).limit(20).then(({ data }) => {
+      if (data) setAllBooks(data);
+    });
   }, []);
+
+  // Auto-scroll book showcase
+  useEffect(() => {
+    if (allBooks.length <= 4) return;
+    const timer = setInterval(() => {
+      setBookSlideOffset((prev) => (prev + 1) % allBooks.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [allBooks.length]);
 
   // Auto-slide features every 4 seconds
   useEffect(() => {

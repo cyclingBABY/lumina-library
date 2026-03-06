@@ -59,6 +59,8 @@ const App = () => (
             <Route path="/admin/digital-access" element={<ProtectedRoute requiredRole="admin"><DigitalAccess /></ProtectedRoute>} />
             <Route path="/admin/weeding" element={<ProtectedRoute requiredRole="admin"><Weeding /></ProtectedRoute>} />
             <Route path="/admin/reporting" element={<ProtectedRoute requiredRole="admin"><Reporting /></ProtectedRoute>} />
+            <Route path="/admin/bulk-import" element={<ProtectedRoute requiredRole="admin"><BulkImport /></ProtectedRoute>} />
+            <Route path="/admin/qr-scanner" element={<ProtectedRoute requiredRole="admin"><QRScanner /></ProtectedRoute>} />
 
             {/* Patron routes */}
             <Route path="/home" element={<ProtectedRoute><PatronHome /></ProtectedRoute>} />

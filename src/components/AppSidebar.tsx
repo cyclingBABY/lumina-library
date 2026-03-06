@@ -16,6 +16,8 @@ const navItems = [
   { icon: Shield, label: "Digital Access", path: "/admin/digital-access" },
   { icon: Trash2, label: "Weeding", path: "/admin/weeding" },
   { icon: BarChart3, label: "Reporting", path: "/admin/reporting" },
+  { icon: FileSpreadsheet, label: "Bulk Import", path: "/admin/bulk-import" },
+  { icon: ScanLine, label: "QR Scanner", path: "/admin/qr-scanner" },
 ];
 
 const AppSidebar = () => {

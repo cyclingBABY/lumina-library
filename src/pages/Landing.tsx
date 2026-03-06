@@ -7,6 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-library.jpg";
 import scanImg from "@/assets/scanning-books.jpg";
 import shelvesImg from "@/assets/library-shelves.jpg";
+import coverSolitude from "@/assets/cover-solitude.jpg";
+import coverTime from "@/assets/cover-time.jpg";
+import coverSapiens from "@/assets/cover-sapiens.jpg";
+import coverDune from "@/assets/cover-dune.jpg";
 
 const features = [
   { icon: Search, title: "Smart Book Catalog", desc: "Advanced search with filters by genre, author, availability, and ISBN for instant discovery." },

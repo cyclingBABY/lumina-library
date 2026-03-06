@@ -18,13 +18,17 @@ export type Database = {
         Row: {
           author: string
           available_copies: number
+          barcode: string | null
           category: string
           cover_color: string | null
           created_at: string
           description: string | null
+          digital_file_type: string | null
+          digital_file_url: string | null
           id: string
           isbn: string | null
           publish_year: number | null
+          shelf_location: string | null
           status: string
           title: string
           total_copies: number
@@ -33,13 +37,17 @@ export type Database = {
         Insert: {
           author: string
           available_copies?: number
+          barcode?: string | null
           category?: string
           cover_color?: string | null
           created_at?: string
           description?: string | null
+          digital_file_type?: string | null
+          digital_file_url?: string | null
           id?: string
           isbn?: string | null
           publish_year?: number | null
+          shelf_location?: string | null
           status?: string
           title: string
           total_copies?: number
@@ -48,13 +56,17 @@ export type Database = {
         Update: {
           author?: string
           available_copies?: number
+          barcode?: string | null
           category?: string
           cover_color?: string | null
           created_at?: string
           description?: string | null
+          digital_file_type?: string | null
+          digital_file_url?: string | null
           id?: string
           isbn?: string | null
           publish_year?: number | null
+          shelf_location?: string | null
           status?: string
           title?: string
           total_copies?: number

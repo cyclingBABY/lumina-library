@@ -1,4 +1,4 @@
-import { BookOpen, LayoutDashboard, Users, BookCopy, CalendarClock, DollarSign, BarChart3, Settings, Search, LogOut, QrCode, Upload, MapPin, ArrowRightLeft, ClipboardList, Shield, Trash2 } from "lucide-react";
+import { BookOpen, LayoutDashboard, Users, BookCopy, CalendarClock, DollarSign, BarChart3, Settings, Search, LogOut, QrCode, Upload, MapPin, ArrowRightLeft, ClipboardList, Shield, Trash2, FileSpreadsheet, ScanLine } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -16,6 +16,8 @@ const navItems = [
   { icon: Shield, label: "Digital Access", path: "/admin/digital-access" },
   { icon: Trash2, label: "Weeding", path: "/admin/weeding" },
   { icon: BarChart3, label: "Reporting", path: "/admin/reporting" },
+  { icon: FileSpreadsheet, label: "Bulk Import", path: "/admin/bulk-import" },
+  { icon: ScanLine, label: "QR Scanner", path: "/admin/qr-scanner" },
 ];
 
 const AppSidebar = () => {

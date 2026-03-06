@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import StaffAuth from "./pages/StaffAuth";
 import PatronHome from "./pages/PatronHome";
 import PatronCatalog from "./pages/PatronCatalog";
 import PatronMyBooks from "./pages/PatronMyBooks";
@@ -57,6 +58,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/staff" element={<StaffAuth />} />
             <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
 
             {/* Admin routes */}

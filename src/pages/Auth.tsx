@@ -76,7 +76,6 @@ const Auth = () => {
         return;
       }
     } else {
-      // Registration — sign up, then ask for OTP
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -94,22 +93,17 @@ const Auth = () => {
         return;
       }
 
-      // If photo was provided, upload it now using the new user ID
       if (data.user && photoFile) {
         const photoUrl = await uploadPhoto(data.user.id);
         if (photoUrl) {
-          // Update profile with photo URL (will be created by trigger)
           setTimeout(async () => {
             await supabase.from("profiles").update({ photo_url: photoUrl }).eq("user_id", data.user!.id);
           }, 1000);
         }
       }
 
-      toast({
-        title: "Verification code sent!",
-        description: "Check your email for the 6-digit code.",
-      });
-      setOtpStep(true);
+      await supabase.auth.signOut();
+      setPendingApproval(true);
       setLoading(false);
       return;
     }

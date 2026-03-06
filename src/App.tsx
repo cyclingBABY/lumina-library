@@ -54,6 +54,7 @@ const App = () => (
             <Route path="/admin/shelf-location" element={<ProtectedRoute requiredRole="admin"><ShelfLocation /></ProtectedRoute>} />
             <Route path="/admin/circulation" element={<ProtectedRoute requiredRole="admin"><Circulation /></ProtectedRoute>} />
             <Route path="/admin/patrons" element={<ProtectedRoute requiredRole="admin"><PatronManagement /></ProtectedRoute>} />
+            <Route path="/admin/approvals" element={<ProtectedRoute requiredRole="admin"><PatronApproval /></ProtectedRoute>} />
             <Route path="/admin/inventory" element={<ProtectedRoute requiredRole="admin"><Inventory /></ProtectedRoute>} />
             <Route path="/admin/holds" element={<ProtectedRoute requiredRole="admin"><HoldManagement /></ProtectedRoute>} />
             <Route path="/admin/fines" element={<ProtectedRoute requiredRole="admin"><FineProcessing /></ProtectedRoute>} />

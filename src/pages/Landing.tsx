@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { BookOpen, Search, BarChart3, Users, QrCode, ArrowRight, BookMarked, Library, Download, CheckCircle2, Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-library.jpg";
 import scanImg from "@/assets/scanning-books.jpg";

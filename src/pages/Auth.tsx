@@ -128,47 +128,7 @@ const Auth = () => {
           </Link>
         </div>
 
-        {/* OTP Verification Step */}
-        {otpStep ? (
-          <div className="bg-card rounded-xl border p-6">
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto text-xl mb-3">📧</div>
-              <h2 className="text-lg font-semibold">Verify Your Email</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Enter the 6-digit code sent to <span className="font-medium text-foreground">{email}</span>
-              </p>
-            </div>
-            <form onSubmit={handleVerifyOtp} className="space-y-4">
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">Verification Code</label>
-                <input
-                  type="text"
-                  required
-                  maxLength={6}
-                  value={otpCode}
-                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                  className={`${inputClass} text-center text-2xl tracking-[0.5em] font-mono`}
-                  placeholder="000000"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading || otpCode.length !== 6}
-                className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                Verify & Complete Registration
-              </button>
-              <button
-                type="button"
-                onClick={() => { setOtpStep(false); setOtpCode(""); }}
-                className="w-full text-sm text-muted-foreground hover:text-foreground"
-              >
-                Back to Registration
-              </button>
-            </form>
-          </div>
-        ) : pendingApproval ? (
+        {pendingApproval ? (
           <div className="bg-card rounded-xl border p-6 text-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">⏳</div>
             <h2 className="text-lg font-semibold">Pending Approval</h2>

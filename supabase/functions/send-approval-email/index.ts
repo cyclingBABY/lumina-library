@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,57 +22,24 @@ serve(async (req) => {
       });
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY not configured");
-    }
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const projectId = Deno.env.get("SUPABASE_URL")?.match(/https:\/\/([^.]+)/)?.[1] || "";
+    // Use Supabase Auth admin to send a magic link as approval notification
+    // This sends the user an email with a link to sign in
+    const { error } = await supabase.auth.admin.generateLink({
+      type: "magiclink",
+      email: email,
+    });
 
-    const response = await fetch(
-      `https://${projectId}.supabase.co/functions/v1/send-transactional-email`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        },
-        body: JSON.stringify({
-          to: email,
-          subject: "🎉 Your Athena Library Account Has Been Approved!",
-          html: buildEmailHtml(fullName),
-        }),
-      }
-    );
-
-    // If the transactional email endpoint doesn't exist, fall back to using
-    // the Lovable callback_url pattern
-    if (!response.ok) {
-      // Use the AI gateway to send
-      const callbackUrl = `https://api.lovable.dev/v1/projects/${projectId}/email/send`;
-      const fallbackResponse = await fetch(callbackUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        },
-        body: JSON.stringify({
-          to: email,
-          subject: "🎉 Your Athena Library Account Has Been Approved!",
-          purpose: "transactional",
-          html: buildEmailHtml(fullName),
-        }),
-      });
-
-      if (!fallbackResponse.ok) {
-        const errorText = await fallbackResponse.text();
-        console.error("Fallback email API error:", errorText);
-        // Don't throw - just log the error, approval still succeeded
-        return new Response(
-          JSON.stringify({ success: false, message: "Approval succeeded but email notification could not be sent. The patron can still sign in." }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
+    if (error) {
+      console.error("Magic link error:", error);
+      // Non-critical - approval still works, just email failed
+      return new Response(
+        JSON.stringify({ success: false, message: "Approval succeeded but email could not be sent." }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     return new Response(JSON.stringify({ success: true }), {
@@ -85,40 +53,3 @@ serve(async (req) => {
     });
   }
 });
-
-function buildEmailHtml(fullName: string | null) {
-  return `
-    <div style="font-family: 'Segoe UI', system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 40px;">
-      <div style="text-align: center; margin-bottom: 30px;">
-        <div style="display: inline-block; width: 50px; height: 50px; background: #1a1a2e; border-radius: 12px; line-height: 50px; font-size: 24px;">📚</div>
-        <h1 style="color: #1a1a2e; margin: 16px 0 4px; font-size: 24px;">Athena Library</h1>
-        <p style="color: #888; font-size: 14px; margin: 0;">Library Management System</p>
-      </div>
-      
-      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 24px;">
-        <div style="font-size: 32px; margin-bottom: 8px;">✅</div>
-        <h2 style="color: #166534; margin: 0 0 8px; font-size: 20px;">Account Approved!</h2>
-        <p style="color: #15803d; margin: 0; font-size: 14px;">Your library account has been verified and activated.</p>
-      </div>
-      
-      <p style="color: #333; font-size: 15px; line-height: 1.6;">
-        Hi <strong>${fullName || "there"}</strong>,
-      </p>
-      <p style="color: #333; font-size: 15px; line-height: 1.6;">
-        Great news! Your Athena Library account has been approved by an administrator. You can now sign in and start using all library services:
-      </p>
-      
-      <ul style="color: #555; font-size: 14px; line-height: 2;">
-        <li>📖 Browse and search the full book catalog</li>
-        <li>📋 Reserve books online</li>
-        <li>📱 Access digital resources</li>
-        <li>🪪 Print your library card</li>
-      </ul>
-      
-      <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
-      <p style="color: #999; font-size: 12px; text-align: center;">
-        This is an automated message from Athena Library Management System.
-      </p>
-    </div>
-  `;
-}

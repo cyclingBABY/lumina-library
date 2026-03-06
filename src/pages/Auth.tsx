@@ -76,6 +76,9 @@ const Auth = () => {
           </div>
           <h1 className="text-2xl font-display font-bold">Athena</h1>
           <p className="text-sm text-muted-foreground mt-1">Library Management System</p>
+          <Link to="/" className="mt-3 inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
+            <ArrowLeft className="w-3.5 h-3.5" />Back to Home
+          </Link>
         </div>
 
         {pendingApproval ? (

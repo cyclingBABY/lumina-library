@@ -110,25 +110,6 @@ const Auth = () => {
     setLoading(false);
   };
 
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token: otpCode,
-      type: "signup",
-    });
-    if (error) {
-      toast({ title: "Verification failed", description: error.message, variant: "destructive" });
-      setLoading(false);
-      return;
-    }
-    // Verified — sign out and show pending approval
-    await supabase.auth.signOut();
-    setOtpStep(false);
-    setPendingApproval(true);
-    setLoading(false);
-  };
 
   const inputClass =
     "w-full px-3 py-2.5 text-sm rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-ring/30";

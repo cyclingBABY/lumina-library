@@ -26,20 +26,15 @@ const Auth = () => {
         navigate("/dashboard");
       }
     } else {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: fullName } },
+        options: { data: { full_name: fullName, account_type: accountType } },
       });
       if (error) {
         toast({ title: "Registration failed", description: error.message, variant: "destructive" });
-      } else if (data.user && accountType === "admin") {
-        // Update role to admin
-        await supabase.from("user_roles").update({ role: "admin" }).eq("user_id", data.user.id);
-        toast({ title: "Admin account created!", description: "You are now logged in as admin." });
-        navigate("/dashboard");
       } else {
-        toast({ title: "Account created!", description: "You are now logged in." });
+        toast({ title: "Account created!", description: `You are now logged in as ${accountType}.` });
         navigate("/dashboard");
       }
     }

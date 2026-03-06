@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Search, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Plus, Search, Pencil, Trash2, ImagePlus } from "lucide-react";
+import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const emptyBook = { title: "", author: "", isbn: "", category: "General", publish_year: "", total_copies: 1, available_copies: 1, description: "", cover_color: "hsl(210 60% 50%)", status: "available" };
@@ -22,6 +22,9 @@ const Cataloging = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<any>(null);
   const [form, setForm] = useState<any>(emptyBook);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const qc = useQueryClient();
 
@@ -34,9 +37,18 @@ const Cataloging = () => {
     },
   });
 
+  const uploadCover = async (bookId: string, file: File): Promise<string> => {
+    const ext = file.name.split(".").pop();
+    const path = `${bookId}.${ext}`;
+    const { error } = await supabase.storage.from("book-covers").upload(path, file, { upsert: true });
+    if (error) throw error;
+    const { data } = supabase.storage.from("book-covers").getPublicUrl(path);
+    return data.publicUrl;
+  };
+
   const saveMutation = useMutation({
     mutationFn: async (book: any) => {
-      const payload = {
+      const payload: any = {
         title: book.title,
         author: book.author,
         isbn: book.isbn || null,
@@ -48,12 +60,21 @@ const Cataloging = () => {
         cover_color: book.cover_color,
         status: book.status,
       };
+
+      let bookId: string;
       if (editingBook) {
-        const { error } = await supabase.from("books").update(payload).eq("id", editingBook.id);
+        bookId = editingBook.id;
+        const { error } = await supabase.from("books").update(payload).eq("id", bookId);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("books").insert(payload);
+        const { data, error } = await supabase.from("books").insert(payload).select("id").single();
         if (error) throw error;
+        bookId = data.id;
+      }
+
+      if (coverFile) {
+        const url = await uploadCover(bookId, coverFile);
+        await supabase.from("books").update({ cover_image_url: url } as any).eq("id", bookId);
       }
     },
     onSuccess: () => {
@@ -76,9 +97,23 @@ const Cataloging = () => {
     onError: (e: any) => toast({ title: "Error", description: e.message, variant: "destructive" }),
   });
 
-  const openAdd = () => { setEditingBook(null); setForm(emptyBook); setDialogOpen(true); };
-  const openEdit = (book: any) => { setEditingBook(book); setForm({ ...book, publish_year: book.publish_year || "" }); setDialogOpen(true); };
-  const closeDialog = () => { setDialogOpen(false); setEditingBook(null); };
+  const openAdd = () => { setEditingBook(null); setForm(emptyBook); setCoverFile(null); setCoverPreview(null); setDialogOpen(true); };
+  const openEdit = (book: any) => {
+    setEditingBook(book);
+    setForm({ ...book, publish_year: book.publish_year || "" });
+    setCoverFile(null);
+    setCoverPreview((book as any).cover_image_url || null);
+    setDialogOpen(true);
+  };
+  const closeDialog = () => { setDialogOpen(false); setEditingBook(null); setCoverFile(null); setCoverPreview(null); };
+
+  const handleCoverSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCoverFile(file);
+      setCoverPreview(URL.createObjectURL(file));
+    }
+  };
 
   const filtered = books?.filter(b =>
     b.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -99,6 +134,7 @@ const Cataloging = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Cover</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Author</TableHead>
               <TableHead>ISBN</TableHead>
@@ -111,11 +147,20 @@ const Cataloging = () => {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">Loading…</TableCell></TableRow>
+              <TableRow><TableCell colSpan={9} className="text-center text-muted-foreground py-8">Loading…</TableCell></TableRow>
             ) : filtered?.length === 0 ? (
-              <TableRow><TableCell colSpan={8} className="text-center text-muted-foreground py-8">No books found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={9} className="text-center text-muted-foreground py-8">No books found</TableCell></TableRow>
             ) : filtered?.map(book => (
               <TableRow key={book.id}>
+                <TableCell>
+                  {(book as any).cover_image_url ? (
+                    <img src={(book as any).cover_image_url} alt={book.title} className="w-10 h-14 object-cover rounded" />
+                  ) : (
+                    <div className="w-10 h-14 rounded flex items-center justify-center text-xs text-muted-foreground" style={{ background: book.cover_color || "hsl(210 60% 50%)" }}>
+                      📖
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell className="font-medium">{book.title}</TableCell>
                 <TableCell>{book.author}</TableCell>
                 <TableCell className="font-mono text-xs">{book.isbn || "—"}</TableCell>
@@ -136,9 +181,29 @@ const Cataloging = () => {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader><DialogTitle>{editingBook ? "Edit Book" : "Add New Book"}</DialogTitle></DialogHeader>
           <div className="grid gap-4 py-2">
+            {/* Cover image upload */}
+            <div>
+              <Label>Book Cover Photo</Label>
+              <div className="flex items-center gap-4 mt-2">
+                {coverPreview ? (
+                  <img src={coverPreview} alt="Cover preview" className="w-20 h-28 object-cover rounded border" />
+                ) : (
+                  <div className="w-20 h-28 rounded border border-dashed border-muted-foreground/30 flex items-center justify-center bg-muted">
+                    <ImagePlus className="w-6 h-6 text-muted-foreground/50" />
+                  </div>
+                )}
+                <div className="flex flex-col gap-2">
+                  <Button type="button" variant="outline" size="sm" onClick={() => fileRef.current?.click()}>
+                    <ImagePlus className="w-4 h-4 mr-2" />{coverPreview ? "Change Photo" : "Upload Photo"}
+                  </Button>
+                  <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleCoverSelect} />
+                  <p className="text-xs text-muted-foreground">JPG, PNG up to 5MB</p>
+                </div>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div><Label>Title *</Label><Input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} /></div>
               <div><Label>Author *</Label><Input value={form.author} onChange={e => setForm({ ...form, author: e.target.value })} /></div>

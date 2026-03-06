@@ -87,6 +87,19 @@ const Auth = () => {
                 />
               </div>
             )}
+            {!isLogin && (
+              <div>
+                <label className="text-sm font-medium mb-1.5 block">Account Type</label>
+                <select
+                  value={accountType}
+                  onChange={(e) => setAccountType(e.target.value as "patron" | "admin")}
+                  className="w-full px-3 py-2.5 text-sm rounded-lg border bg-background focus:outline-none focus:ring-2 focus:ring-ring/30"
+                >
+                  <option value="patron">User (Patron)</option>
+                  <option value="admin">Admin (Librarian)</option>
+                </select>
+              </div>
+            )}
             <div>
               <label className="text-sm font-medium mb-1.5 block">Email</label>
               <input

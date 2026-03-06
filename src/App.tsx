@@ -29,6 +29,8 @@ import FineProcessing from "./pages/admin/FineProcessing";
 import DigitalAccess from "./pages/admin/DigitalAccess";
 import Weeding from "./pages/admin/Weeding";
 import Reporting from "./pages/admin/Reporting";
+import BulkImport from "./pages/admin/BulkImport";
+import QRScanner from "./pages/admin/QRScanner";
 
 const queryClient = new QueryClient();
 

@@ -119,7 +119,7 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* How It Works — with photos */}
       <section id="about" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
@@ -130,19 +130,35 @@ const Landing = () => {
               Get started in three simple steps.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {steps.map((s, i) => (
-              <div key={s.num} className="text-center space-y-4 relative">
-                {i < 2 && (
-                  <div className="hidden md:block absolute top-8 left-[60%] w-[80%] border-t-2 border-dashed border-border" />
-                )}
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-                  <span className="text-xl font-display font-bold text-primary">{s.num}</span>
-                </div>
-                <h3 className="font-display font-semibold text-lg text-foreground">{s.title}</h3>
-                <p className="text-sm text-muted-foreground">{s.desc}</p>
-              </div>
-            ))}
+
+          {/* Step 1 — image left */}
+          <div className="grid md:grid-cols-2 gap-10 items-center max-w-5xl mx-auto mb-16">
+            <img src={shelvesImg} alt="Library bookshelves" className="rounded-xl shadow-lg w-full h-64 object-cover" />
+            <div className="space-y-3">
+              <span className="text-4xl font-display font-bold text-primary/20">01</span>
+              <h3 className="text-xl font-display font-semibold text-foreground">Register an Account</h3>
+              <p className="text-muted-foreground leading-relaxed">Sign up as a student, staff member, or administrator in seconds. Your account will be reviewed and approved by the library admin.</p>
+            </div>
+          </div>
+
+          {/* Step 2 — image right */}
+          <div className="grid md:grid-cols-2 gap-10 items-center max-w-5xl mx-auto mb-16">
+            <div className="space-y-3 md:order-1">
+              <span className="text-4xl font-display font-bold text-primary/20">02</span>
+              <h3 className="text-xl font-display font-semibold text-foreground">Search the Catalog</h3>
+              <p className="text-muted-foreground leading-relaxed">Browse thousands of titles with powerful filters and real-time availability. Find physical books by shelf or access digital resources instantly.</p>
+            </div>
+            <img src={scanImg} alt="Scanning book barcode" className="rounded-xl shadow-lg w-full h-64 object-cover md:order-2" />
+          </div>
+
+          {/* Step 3 — image left */}
+          <div className="grid md:grid-cols-2 gap-10 items-center max-w-5xl mx-auto">
+            <img src={heroImg} alt="Students in library" className="rounded-xl shadow-lg w-full h-64 object-cover" />
+            <div className="space-y-3">
+              <span className="text-4xl font-display font-bold text-primary/20">03</span>
+              <h3 className="text-xl font-display font-semibold text-foreground">Borrow or Access</h3>
+              <p className="text-muted-foreground leading-relaxed">Check out physical books with QR code scanning or instantly access digital resources from anywhere on any device.</p>
+            </div>
           </div>
         </div>
       </section>

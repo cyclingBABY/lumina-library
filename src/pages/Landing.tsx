@@ -7,6 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-library.jpg";
 import scanImg from "@/assets/scanning-books.jpg";
 import shelvesImg from "@/assets/library-shelves.jpg";
+import coverSolitude from "@/assets/cover-solitude.jpg";
+import coverTime from "@/assets/cover-time.jpg";
+import coverSapiens from "@/assets/cover-sapiens.jpg";
+import coverDune from "@/assets/cover-dune.jpg";
 
 const features = [
   { icon: Search, title: "Smart Book Catalog", desc: "Advanced search with filters by genre, author, availability, and ISBN for instant discovery." },
@@ -176,10 +180,10 @@ const Landing = () => {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {(books.length > 0 ? books : [
-              { title: "One Hundred Years of Solitude", author: "Gabriel García Márquez", status: "available", cover_color: "hsl(24,80%,30%)" },
-              { title: "A Brief History of Time", author: "Stephen Hawking", status: "checked-out", cover_color: "hsl(210,60%,50%)" },
-              { title: "Sapiens", author: "Yuval Noah Harari", status: "available", cover_color: "hsl(36,70%,55%)" },
-              { title: "Dune", author: "Frank Herbert", status: "reserved", cover_color: "hsl(36,90%,50%)" },
+              { title: "One Hundred Years of Solitude", author: "Gabriel García Márquez", status: "available", cover_image_url: coverSolitude },
+              { title: "A Brief History of Time", author: "Stephen Hawking", status: "checked-out", cover_image_url: coverTime },
+              { title: "Sapiens", author: "Yuval Noah Harari", status: "available", cover_image_url: coverSapiens },
+              { title: "Dune", author: "Frank Herbert", status: "reserved", cover_image_url: coverDune },
             ]).map((book: any, i) => (
               <Card key={i} className="overflow-hidden group hover:shadow-lg transition-shadow">
                 {book.cover_image_url ? (

@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+  { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
   { icon: BookOpen, label: "Cataloging", path: "/admin/cataloging" },
   { icon: QrCode, label: "Barcoding", path: "/admin/barcoding" },
   { icon: Upload, label: "Digital Upload", path: "/admin/digital-upload" },

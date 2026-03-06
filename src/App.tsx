@@ -31,6 +31,7 @@ import Weeding from "./pages/admin/Weeding";
 import Reporting from "./pages/admin/Reporting";
 import BulkImport from "./pages/admin/BulkImport";
 import QRScanner from "./pages/admin/QRScanner";
+import PatronApproval from "./pages/admin/PatronApproval";
 
 const queryClient = new QueryClient();
 

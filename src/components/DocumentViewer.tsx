@@ -98,7 +98,13 @@ const DocumentViewer = ({ book, open, onOpenChange }: DocumentViewerProps) => {
 
   const handleDownload = () => {
     if (book.digital_file_url) {
-      window.open(book.digital_file_url, "_blank");
+      const link = document.createElement("a");
+      link.href = book.digital_file_url;
+      link.target = "_blank";
+      link.download = book.title || "document";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 

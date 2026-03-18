@@ -16,7 +16,7 @@ const QRScanner = () => {
   const [copyIdInput, setCopyIdInput] = useState("");
   const [scannedCopy, setScannedCopy] = useState<any>(null);
   const [scannedBook, setScannedBook] = useState<any>(null);
-  const [patronEmail, setPatronEmail] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [action, setAction] = useState<"issue" | "return">("issue");
   const [processing, setProcessing] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);

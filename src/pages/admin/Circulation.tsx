@@ -187,7 +187,7 @@ const Circulation = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCheckoutOpen(false)}>Cancel</Button>
-            <Button onClick={() => checkoutMutation.mutate()} disabled={!selectedBook || !patronEmail || checkoutMutation.isPending}>
+            <Button onClick={() => checkoutMutation.mutate()} disabled={!selectedBook || !userEmail || checkoutMutation.isPending}>
               {checkoutMutation.isPending ? "Processing…" : "Check Out"}
             </Button>
           </DialogFooter>

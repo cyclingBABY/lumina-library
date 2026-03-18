@@ -9,12 +9,12 @@ import Landing from "./pages/Landing";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import StaffAuth from "./pages/StaffAuth";
-import PatronHome from "./pages/PatronHome";
-import PatronCatalog from "./pages/PatronCatalog";
-import PatronMyBooks from "./pages/PatronMyBooks";
-import PatronReservations from "./pages/PatronReservations";
-import PatronFines from "./pages/PatronFines";
-import PatronProfile from "./pages/PatronProfile";
+import UserHome from "./pages/UserHome";
+import UserCatalog from "./pages/UserCatalog";
+import UserMyBooks from "./pages/UserMyBooks";
+import UserReservations from "./pages/UserReservations";
+import UserFines from "./pages/UserFines";
+import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -23,7 +23,7 @@ import Barcoding from "./pages/admin/Barcoding";
 import DigitalUpload from "./pages/admin/DigitalUpload";
 import ShelfLocation from "./pages/admin/ShelfLocation";
 import Circulation from "./pages/admin/Circulation";
-import PatronManagement from "./pages/admin/PatronManagement";
+import UserManagement from "./pages/admin/UserManagement";
 import Inventory from "./pages/admin/Inventory";
 import HoldManagement from "./pages/admin/HoldManagement";
 import FineProcessing from "./pages/admin/FineProcessing";
@@ -33,7 +33,7 @@ import Reporting from "./pages/admin/Reporting";
 import BulkImport from "./pages/admin/BulkImport";
 import QRScanner from "./pages/admin/QRScanner";
 import BarcodeStation from "./pages/admin/BarcodeStation";
-import PatronApproval from "./pages/admin/PatronApproval";
+import UserApproval from "./pages/admin/UserApproval";
 import LecturerManagement from "./pages/admin/LecturerManagement";
 
 // Lecturer pages
@@ -68,8 +68,8 @@ const App = () => (
             <Route path="/admin/digital-upload" element={<ProtectedRoute requiredRole="admin"><DigitalUpload /></ProtectedRoute>} />
             <Route path="/admin/shelf-location" element={<ProtectedRoute requiredRole="admin"><ShelfLocation /></ProtectedRoute>} />
             <Route path="/admin/circulation" element={<ProtectedRoute requiredRole="admin"><Circulation /></ProtectedRoute>} />
-            <Route path="/admin/patrons" element={<ProtectedRoute requiredRole="admin"><PatronManagement /></ProtectedRoute>} />
-            <Route path="/admin/approvals" element={<ProtectedRoute requiredRole="admin"><PatronApproval /></ProtectedRoute>} />
+            <Route path="/admin/users" element={<ProtectedRoute requiredRole="admin"><UserManagement /></ProtectedRoute>} />
+            <Route path="/admin/approvals" element={<ProtectedRoute requiredRole="admin"><UserApproval /></ProtectedRoute>} />
             <Route path="/admin/lecturers" element={<ProtectedRoute requiredRole="admin"><LecturerManagement /></ProtectedRoute>} />
             <Route path="/admin/inventory" element={<ProtectedRoute requiredRole="admin"><Inventory /></ProtectedRoute>} />
             <Route path="/admin/holds" element={<ProtectedRoute requiredRole="admin"><HoldManagement /></ProtectedRoute>} />
@@ -92,13 +92,13 @@ const App = () => (
             <Route path="/lecturer/notifications" element={<ProtectedRoute requiredRole="lecturer"><LecturerNotifications /></ProtectedRoute>} />
             <Route path="/lecturer/profile" element={<ProtectedRoute requiredRole="lecturer"><LecturerProfile /></ProtectedRoute>} />
 
-            {/* Patron routes */}
-            <Route path="/home" element={<ProtectedRoute><PatronHome /></ProtectedRoute>} />
-            <Route path="/catalog" element={<ProtectedRoute><PatronCatalog /></ProtectedRoute>} />
-            <Route path="/my-books" element={<ProtectedRoute><PatronMyBooks /></ProtectedRoute>} />
-            <Route path="/reservations" element={<ProtectedRoute><PatronReservations /></ProtectedRoute>} />
-            <Route path="/fines" element={<ProtectedRoute><PatronFines /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><PatronProfile /></ProtectedRoute>} />
+            {/* User routes */}
+            <Route path="/home" element={<ProtectedRoute><UserHome /></ProtectedRoute>} />
+            <Route path="/catalog" element={<ProtectedRoute><UserCatalog /></ProtectedRoute>} />
+            <Route path="/my-books" element={<ProtectedRoute><UserMyBooks /></ProtectedRoute>} />
+            <Route path="/reservations" element={<ProtectedRoute><UserReservations /></ProtectedRoute>} />
+            <Route path="/fines" element={<ProtectedRoute><UserFines /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

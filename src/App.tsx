@@ -33,7 +33,6 @@ import Reporting from "./pages/admin/Reporting";
 import BulkImport from "./pages/admin/BulkImport";
 import QRScanner from "./pages/admin/QRScanner";
 import BarcodeStation from "./pages/admin/BarcodeStation";
-import PhysicalBookScanner from "./pages/admin/PhysicalBookScanner";
 import PatronApproval from "./pages/admin/PatronApproval";
 import LecturerManagement from "./pages/admin/LecturerManagement";
 

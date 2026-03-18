@@ -26,7 +26,7 @@ const StatsCards = () => {
       setStats({
         totalBooks: booksRes.data?.reduce((sum, b) => sum + (b.total_copies || 0), 0) || 0,
         checkedOut: checkedOutRes.data?.length || 0,
-        activePatrons: patronsRes.data?.length || 0,
+        activeUsers: patronsRes.data?.length || 0,
         overdueItems: overdueCount,
       });
     };

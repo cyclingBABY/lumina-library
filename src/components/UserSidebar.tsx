@@ -11,7 +11,7 @@ const navItems = [
   { icon: User, label: "My Profile", to: "/profile" },
 ];
 
-const PatronSidebar = () => {
+const UserSidebar = () => {
   const { signOut } = useAuth();
 
   return (
@@ -23,7 +23,7 @@ const PatronSidebar = () => {
           </div>
           <div>
             <h1 className="text-base font-display font-semibold text-sidebar-foreground">Athena</h1>
-            <p className="text-xs text-sidebar-foreground/50">Patron Portal</p>
+            <p className="text-xs text-sidebar-foreground/50">User Portal</p>
           </div>
         </div>
       </div>
@@ -60,4 +60,4 @@ const PatronSidebar = () => {
   );
 };
 
-export default PatronSidebar;
+export default UserSidebar;

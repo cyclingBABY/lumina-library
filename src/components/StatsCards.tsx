@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, BookCopy, Users, AlertTriangle } from "lucide-react";
 
 const StatsCards = () => {
-  const [stats, setStats] = useState({ totalBooks: 0, checkedOut: 0, activePatrons: 0, overdueItems: 0 });
+  const [stats, setStats] = useState({ totalBooks: 0, checkedOut: 0, activeUsers: 0, overdueItems: 0 });
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -26,7 +26,7 @@ const StatsCards = () => {
       setStats({
         totalBooks: booksRes.data?.reduce((sum, b) => sum + (b.total_copies || 0), 0) || 0,
         checkedOut: checkedOutRes.data?.length || 0,
-        activePatrons: patronsRes.data?.length || 0,
+        activeUsers: patronsRes.data?.length || 0,
         overdueItems: overdueCount,
       });
     };
@@ -36,7 +36,7 @@ const StatsCards = () => {
   const cards = [
     { label: "Total Books", value: stats.totalBooks.toLocaleString(), icon: BookOpen, color: "text-primary" },
     { label: "Checked Out", value: stats.checkedOut.toLocaleString(), icon: BookCopy, color: "text-info" },
-    { label: "Active Patrons", value: stats.activePatrons.toLocaleString(), icon: Users, color: "text-accent" },
+    { label: "Active Users", value: stats.activeUsers.toLocaleString(), icon: Users, color: "text-accent" },
     { label: "Overdue Items", value: stats.overdueItems.toString(), icon: AlertTriangle, color: "text-destructive" },
   ];
 

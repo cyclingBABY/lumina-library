@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import PatronSidebar from "@/components/PatronSidebar";
+import UserSidebar from "@/components/UserSidebar";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign } from "lucide-react";
 
-const PatronFines = () => {
+const UserFines = () => {
   const [fines, setFines] = useState<any[]>([]);
   const { user } = useAuth();
 
@@ -23,12 +23,11 @@ const PatronFines = () => {
   }, [user]);
 
   const unpaid = fines.filter((f) => !f.paid);
-  const paid = fines.filter((f) => f.paid);
   const totalOwed = unpaid.reduce((sum, f) => sum + Number(f.amount), 0);
 
   return (
     <div className="flex min-h-screen bg-background">
-      <PatronSidebar />
+      <UserSidebar />
       <main className="flex-1 p-6 overflow-auto">
         <h1 className="text-2xl font-display font-bold mb-6">Fines & Fees</h1>
 
@@ -69,4 +68,4 @@ const PatronFines = () => {
   );
 };
 
-export default PatronFines;
+export default UserFines;

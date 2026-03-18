@@ -5,9 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import DocumentViewer from "@/components/DocumentViewer";
 import EnhancedBookCard from "@/components/EnhancedBookCard";
-import PatronSidebar from "@/components/PatronSidebar";
+import UserSidebar from "@/components/UserSidebar";
 
-const PatronCatalog = () => {
+const UserCatalog = () => {
   const [books, setBooks] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
@@ -46,11 +46,10 @@ const PatronCatalog = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <PatronSidebar />
+      <UserSidebar />
       <main className="flex-1 p-6 overflow-auto">
         <h1 className="text-2xl font-display font-bold mb-6">Browse Catalog</h1>
 
-        {/* Filters */}
         <div className="bg-card rounded-xl border p-5 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex gap-2 flex-wrap">
@@ -79,7 +78,6 @@ const PatronCatalog = () => {
           </div>
         </div>
 
-        {/* Grid of enhanced book cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {filtered.map((book) => (
             <EnhancedBookCard
@@ -106,4 +104,4 @@ const PatronCatalog = () => {
   );
 };
 
-export default PatronCatalog;
+export default UserCatalog;

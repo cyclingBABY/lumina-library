@@ -1,12 +1,12 @@
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import PatronSidebar from "@/components/PatronSidebar";
+import UserSidebar from "@/components/UserSidebar";
 import ContinueReadingShelf from "@/components/ContinueReadingShelf";
 import { BookOpen, BookCopy, CalendarClock, DollarSign, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const PatronHome = () => {
+const UserHome = () => {
   const { user } = useAuth();
 
   const { data: profile } = useQuery({
@@ -61,9 +61,8 @@ const PatronHome = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <PatronSidebar />
+      <UserSidebar />
       <main className="flex-1 p-6 md:p-8 overflow-auto">
-        {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-display font-bold text-foreground">
             {greeting()}, {profile?.full_name || "Reader"}
@@ -73,7 +72,6 @@ const PatronHome = () => {
           </p>
         </div>
 
-        {/* Quick Actions Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {quickActions.map(({ icon: Icon, label, description, to, color }) => (
             <Link key={to} to={to} className="group bg-card border rounded-xl p-5 hover:shadow-md transition-all hover:-translate-y-0.5">
@@ -89,11 +87,10 @@ const PatronHome = () => {
           ))}
         </div>
 
-        {/* Continue Reading Shelf */}
         <ContinueReadingShelf myBooksLink="/my-books" />
       </main>
     </div>
   );
 };
 
-export default PatronHome;
+export default UserHome;

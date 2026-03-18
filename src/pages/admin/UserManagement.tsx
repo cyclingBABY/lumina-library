@@ -13,7 +13,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 
-const PatronManagement = () => {
+const UserManagement = () => {
   const [search, setSearch] = useState("");
   const [editProfile, setEditProfile] = useState<any>(null);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -23,11 +23,10 @@ const PatronManagement = () => {
   const qc = useQueryClient();
 
   const { data: profiles, isLoading } = useQuery({
-    queryKey: ["admin-patrons"],
+    queryKey: ["admin-users"],
     queryFn: async () => {
       const { data, error } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
       if (error) throw error;
-      // Fetch roles for each profile
       const { data: roles } = await supabase.from("user_roles").select("user_id, role");
       return data.map(p => ({
         ...p,
@@ -46,7 +45,7 @@ const PatronManagement = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-patrons"] });
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
       toast({ title: "User updated" });
       setEditProfile(null);
     },
@@ -59,7 +58,7 @@ const PatronManagement = () => {
       if (error) throw error;
     },
     onSuccess: (_, { approve }) => {
-      qc.invalidateQueries({ queryKey: ["admin-patrons"] });
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
       toast({ title: approve ? "User approved" : "User suspended" });
     },
     onError: (e: any) => toast({ title: "Error", description: e.message, variant: "destructive" }),
@@ -71,7 +70,7 @@ const PatronManagement = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-patrons"] });
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
       toast({ title: "Role updated" });
     },
     onError: (e: any) => toast({ title: "Error", description: e.message, variant: "destructive" }),
@@ -79,7 +78,6 @@ const PatronManagement = () => {
 
   const addUserMutation = useMutation({
     mutationFn: async (u: typeof addForm) => {
-      // Use edge function to create user (admin-only)
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: u.email,
         password: u.password,
@@ -90,16 +88,14 @@ const PatronManagement = () => {
       const newUserId = signUpData.user?.id;
       if (!newUserId) throw new Error("User creation failed");
 
-      // Approve immediately since admin is adding them
       await supabase.from("profiles").update({ approved: true, phone: u.phone || null } as any).eq("user_id", newUserId);
 
-      // Set role
       if (u.role === "admin") {
         await supabase.from("user_roles").update({ role: "admin" }).eq("user_id", newUserId);
       }
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-patrons"] });
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
       toast({ title: "User added and approved" });
       setAddDialogOpen(false);
       setAddForm({ full_name: "", email: "", password: "", phone: "", role: "patron" });
@@ -158,7 +154,7 @@ const PatronManagement = () => {
                 <TableCell>{p.email || "—"}</TableCell>
                 <TableCell>
                   <Badge variant={(p as any).role === "admin" ? "default" : "secondary"}>
-                    {(p as any).role === "admin" ? "Admin" : "Patron"}
+                    {(p as any).role === "admin" ? "Admin" : "User"}
                   </Badge>
                 </TableCell>
                 <TableCell>
@@ -236,7 +232,7 @@ const PatronManagement = () => {
               <Select value={addForm.role} onValueChange={v => setAddForm({ ...addForm, role: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="patron">Patron</SelectItem>
+                  <SelectItem value="patron">User</SelectItem>
                   <SelectItem value="admin">Admin</SelectItem>
                 </SelectContent>
               </Select>
@@ -257,4 +253,4 @@ const PatronManagement = () => {
   );
 };
 
-export default PatronManagement;
+export default UserManagement;

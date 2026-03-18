@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import PatronSidebar from "@/components/PatronSidebar";
+import UserSidebar from "@/components/UserSidebar";
 import { Badge } from "@/components/ui/badge";
 import { BookCopy, RefreshCw } from "lucide-react";
 
-const PatronMyBooks = () => {
+const UserMyBooks = () => {
   const [records, setRecords] = useState<any[]>([]);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -47,7 +47,7 @@ const PatronMyBooks = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <PatronSidebar />
+      <UserSidebar />
       <main className="flex-1 p-6 overflow-auto">
         <h1 className="text-2xl font-display font-bold mb-6">My Books</h1>
 
@@ -111,4 +111,4 @@ const PatronMyBooks = () => {
   );
 };
 
-export default PatronMyBooks;
+export default UserMyBooks;

@@ -17,7 +17,7 @@ const Circulation = () => {
   const [search, setSearch] = useState("");
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState("");
-  const [patronEmail, setPatronEmail] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const { toast } = useToast();
   const qc = useQueryClient();
 
@@ -44,8 +44,8 @@ const Circulation = () => {
   const checkoutMutation = useMutation({
     mutationFn: async () => {
       // Find patron by email
-      const { data: profile } = await supabase.from("profiles").select("user_id").eq("email", patronEmail).maybeSingle();
-      if (!profile) throw new Error("Patron not found with that email");
+      const { data: profile } = await supabase.from("profiles").select("user_id").eq("email", userEmail).maybeSingle();
+      if (!profile) throw new Error("User not found with that email");
       
       const { error } = await supabase.from("circulation_records").insert({
         book_id: selectedBook,
@@ -70,7 +70,7 @@ const Circulation = () => {
       toast({ title: "Book checked out successfully" });
       setCheckoutOpen(false);
       setSelectedBook("");
-      setPatronEmail("");
+      setUserEmail("");
     },
     onError: (e: any) => toast({ title: "Error", description: e.message, variant: "destructive" }),
   });
@@ -172,8 +172,8 @@ const Circulation = () => {
           <DialogHeader><DialogTitle>New Book Check-out</DialogTitle></DialogHeader>
           <div className="grid gap-4 py-2">
             <div>
-              <Label>Patron Email</Label>
-              <Input value={patronEmail} onChange={e => setPatronEmail(e.target.value)} placeholder="patron@example.com" />
+              <Label>User Email</Label>
+              <Input value={userEmail} onChange={e => setUserEmail(e.target.value)} placeholder="user@example.com" />
             </div>
             <div>
               <Label>Select Book</Label>
@@ -187,7 +187,7 @@ const Circulation = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setCheckoutOpen(false)}>Cancel</Button>
-            <Button onClick={() => checkoutMutation.mutate()} disabled={!selectedBook || !patronEmail || checkoutMutation.isPending}>
+            <Button onClick={() => checkoutMutation.mutate()} disabled={!selectedBook || !userEmail || checkoutMutation.isPending}>
               {checkoutMutation.isPending ? "Processing…" : "Check Out"}
             </Button>
           </DialogFooter>

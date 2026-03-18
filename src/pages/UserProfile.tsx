@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import PatronSidebar from "@/components/PatronSidebar";
+import UserSidebar from "@/components/UserSidebar";
 import LibraryIDCard from "@/components/LibraryIDCard";
 import ProfilePhotoUpload from "@/components/ProfilePhotoUpload";
 import { Loader2 } from "lucide-react";
 
-const PatronProfile = () => {
+const UserProfile = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [profile, setProfile] = useState<any>(null);
@@ -51,7 +51,7 @@ const PatronProfile = () => {
   if (loading) {
     return (
       <div className="flex min-h-screen bg-background">
-        <PatronSidebar />
+        <UserSidebar />
         <main className="flex-1 flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></main>
       </div>
     );
@@ -59,7 +59,7 @@ const PatronProfile = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <PatronSidebar />
+      <UserSidebar />
       <main className="flex-1 p-6 overflow-auto">
         <h1 className="text-2xl font-display font-bold mb-6">My Profile</h1>
 
@@ -135,4 +135,4 @@ const PatronProfile = () => {
   );
 };
 
-export default PatronProfile;
+export default UserProfile;

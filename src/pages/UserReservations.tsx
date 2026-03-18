@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import PatronSidebar from "@/components/PatronSidebar";
+import UserSidebar from "@/components/UserSidebar";
 import { Badge } from "@/components/ui/badge";
 import { CalendarClock, X } from "lucide-react";
 
@@ -12,7 +12,7 @@ const statusStyles: Record<string, string> = {
   cancelled: "bg-muted text-muted-foreground border-border",
 };
 
-const PatronReservations = () => {
+const UserReservations = () => {
   const [reservations, setReservations] = useState<any[]>([]);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -41,7 +41,7 @@ const PatronReservations = () => {
 
   return (
     <div className="flex min-h-screen bg-background">
-      <PatronSidebar />
+      <UserSidebar />
       <main className="flex-1 p-6 overflow-auto">
         <h1 className="text-2xl font-display font-bold mb-6">My Reservations</h1>
 
@@ -81,4 +81,4 @@ const PatronReservations = () => {
   );
 };
 
-export default PatronReservations;
+export default UserReservations;

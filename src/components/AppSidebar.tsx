@@ -10,7 +10,7 @@ const navItems = [
   { icon: MapPin, label: "Shelf Location", path: "/admin/shelf-location" },
   { icon: ArrowRightLeft, label: "Circulation", path: "/admin/circulation" },
   { icon: UserCheck, label: "Approvals", path: "/admin/approvals" },
-  { icon: Users, label: "Patrons", path: "/admin/patrons" },
+  { icon: Users, label: "Users", path: "/admin/users" },
   { icon: GraduationCap, label: "Lecturers", path: "/admin/lecturers" },
   { icon: ClipboardList, label: "Inventory", path: "/admin/inventory" },
   { icon: CalendarClock, label: "Holds", path: "/admin/holds" },

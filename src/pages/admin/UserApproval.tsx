@@ -15,7 +15,7 @@ interface PendingUser {
   created_at: string;
 }
 
-const PatronApproval = () => {
+const UserApproval = () => {
   const { toast } = useToast();
   const [users, setUsers] = useState<PendingUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,10 +48,9 @@ const PatronApproval = () => {
     if (error) {
       toast({ title: "Approval failed", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Patron approved!", description: "They can now sign in to the system." });
+      toast({ title: "User approved!", description: "They can now sign in to the system." });
       setUsers((prev) => prev.map((u) => (u.user_id === userId ? { ...u, approved: true } : u)));
 
-      // Send approval notification email
       try {
         await supabase.functions.invoke("send-approval-email", {
           body: { email: user?.email, fullName: user?.full_name },
@@ -69,7 +68,7 @@ const PatronApproval = () => {
     if (error) {
       toast({ title: "Action failed", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Patron access revoked." });
+      toast({ title: "User access revoked." });
       setUsers((prev) => prev.map((u) => (u.user_id === userId ? { ...u, approved: false } : u)));
     }
     setActionLoading(null);
@@ -92,9 +91,9 @@ const PatronApproval = () => {
       <main className="flex-1 p-6 overflow-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-display font-bold">Patron Approval</h1>
+            <h1 className="text-2xl font-display font-bold">User Approval</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Review and approve new patron registrations
+              Review and approve new user registrations
             </p>
           </div>
           {pendingCount > 0 && filter !== "pending" && (
@@ -108,7 +107,6 @@ const PatronApproval = () => {
           )}
         </div>
 
-        {/* Filters */}
         <div className="flex items-center gap-3 mb-6">
           <div className="flex bg-secondary rounded-lg p-1">
             {(["pending", "approved", "all"] as const).map((f) => (
@@ -143,7 +141,7 @@ const PatronApproval = () => {
           <div className="text-center py-20">
             <UserCheck className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
             <p className="text-muted-foreground">
-              {filter === "pending" ? "No pending registrations" : "No patrons found"}
+              {filter === "pending" ? "No pending registrations" : "No users found"}
             </p>
           </div>
         ) : (
@@ -153,7 +151,6 @@ const PatronApproval = () => {
                 key={user.id}
                 className="bg-card rounded-xl border p-4 flex items-center gap-4 hover:shadow-sm transition-shadow"
               >
-                {/* Photo */}
                 {(user as any).photo_url ? (
                   <img
                     src={(user as any).photo_url}
@@ -166,7 +163,6 @@ const PatronApproval = () => {
                   </div>
                 )}
 
-                {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold truncate">{user.full_name || "No name"}</h3>
@@ -191,7 +187,6 @@ const PatronApproval = () => {
                   </p>
                 </div>
 
-                {/* Actions */}
                 <div className="flex items-center gap-2 shrink-0">
                   {!user.approved ? (
                     <button
@@ -230,4 +225,4 @@ const PatronApproval = () => {
   );
 };
 
-export default PatronApproval;
+export default UserApproval;

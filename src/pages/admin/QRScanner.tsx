@@ -16,7 +16,7 @@ const QRScanner = () => {
   const [copyIdInput, setCopyIdInput] = useState("");
   const [scannedCopy, setScannedCopy] = useState<any>(null);
   const [scannedBook, setScannedBook] = useState<any>(null);
-  const [patronEmail, setPatronEmail] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [action, setAction] = useState<"issue" | "return">("issue");
   const [processing, setProcessing] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -79,11 +79,11 @@ const QRScanner = () => {
   }, []);
 
   const issueBook = async () => {
-    if (!scannedCopy || !patronEmail) return;
+    if (!scannedCopy || !userEmail) return;
     setProcessing(true);
     try {
-      const { data: profile } = await supabase.from("profiles").select("user_id").eq("email", patronEmail).maybeSingle();
-      if (!profile) throw new Error("Patron not found with that email");
+      const { data: profile } = await supabase.from("profiles").select("user_id").eq("email", userEmail).maybeSingle();
+      if (!profile) throw new Error("User not found with that email");
 
       await supabase.from("borrow_records" as any).insert({
         copy_id: scannedCopy.id,
@@ -107,7 +107,7 @@ const QRScanner = () => {
       setScannedCopy(null);
       setScannedBook(null);
       setCopyIdInput("");
-      setPatronEmail("");
+      setUserEmail("");
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
     }
@@ -207,8 +207,8 @@ const QRScanner = () => {
 
             {action === "issue" && (
               <div>
-                <Label>Patron Email</Label>
-                <Input value={patronEmail} onChange={e => setPatronEmail(e.target.value)} placeholder="patron@example.com" />
+                <Label>User Email</Label>
+                <Input value={userEmail} onChange={e => setUserEmail(e.target.value)} placeholder="user@example.com" />
               </div>
             )}
           </CardContent>
@@ -247,7 +247,7 @@ const QRScanner = () => {
 
                 <div className="pt-4 flex gap-2">
                   {action === "issue" ? (
-                    <Button className="w-full" onClick={issueBook} disabled={processing || scannedCopy.status !== "available" || !patronEmail}>
+                    <Button className="w-full" onClick={issueBook} disabled={processing || scannedCopy.status !== "available" || !userEmail}>
                       {processing ? "Processing…" : scannedCopy.status !== "available" ? `Cannot issue (${scannedCopy.status})` : "Issue This Copy"}
                     </Button>
                   ) : (

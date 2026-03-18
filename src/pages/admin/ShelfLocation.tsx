@@ -27,7 +27,12 @@ const ShelfLocation = () => {
   const { data: books, isLoading } = useQuery({
     queryKey: ["admin-books-shelf"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("books").select("id, title, author, category, status, shelf_location").order("category").order("title");
+      const { data, error } = await supabase
+        .from("books")
+        .select("id, title, author, category, status, shelf_location, digital_file_url")
+        .is("digital_file_url", null)
+        .order("category")
+        .order("title");
       if (error) throw error;
       return data;
     },
@@ -47,7 +52,7 @@ const ShelfLocation = () => {
 
   const autoAssign = useMutation({
     mutationFn: async () => {
-      const booksToUpdate = books?.filter(b => !(b as any).shelf_location) || [];
+      const booksToUpdate = books?.filter(b => !b.shelf_location) || [];
       for (const book of booksToUpdate) {
         const shelf = shelfMap[book.category] || "Z1-Z10";
         const row = Math.floor(Math.random() * 5) + 1;
@@ -63,7 +68,7 @@ const ShelfLocation = () => {
   const filtered = books?.filter(b => b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <AdminLayout title="Shelf Location Assignment" description="Assign and manage physical shelf locations for catalog items">
+    <AdminLayout title="Shelf Location Assignment" description="Assign and manage physical shelf locations for physical catalog items (digital-only books are excluded)">
       <div className="flex items-center justify-between gap-4 mb-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -93,15 +98,15 @@ const ShelfLocation = () => {
                 <TableCell>{book.author}</TableCell>
                 <TableCell><Badge variant="secondary">{book.category}</Badge></TableCell>
                 <TableCell>
-                  {(book as any).shelf_location ? (
-                    <Badge variant="outline">{(book as any).shelf_location}</Badge>
+                  {book.shelf_location ? (
+                    <Badge variant="outline">{book.shelf_location}</Badge>
                   ) : (
                     <span className="text-muted-foreground text-sm">Not assigned</span>
                   )}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" onClick={() => { setEditId(book.id); setShelfValue((book as any).shelf_location || ""); }}>
-                    {(book as any).shelf_location ? "Edit" : "Assign"}
+                  <Button variant="ghost" size="sm" onClick={() => { setEditId(book.id); setShelfValue(book.shelf_location || ""); }}>
+                    {book.shelf_location ? "Edit" : "Assign"}
                   </Button>
                 </TableCell>
               </TableRow>

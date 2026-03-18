@@ -112,7 +112,7 @@ const Cataloging = () => {
   const saveMutation = useMutation({
     mutationFn: async (book: any) => {
       const isDigital = bookType === "digital";
-      const barcode = isDigital ? null : (editingBook?.barcode || generateBarcode());
+      const barcode = isDigital ? null : (editingBook?.barcode || book.barcode || generateBarcode());
 
       const payload: any = {
         title: book.title,

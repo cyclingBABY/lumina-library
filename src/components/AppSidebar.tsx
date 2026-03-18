@@ -20,6 +20,7 @@ const navItems = [
   { icon: BarChart3, label: "Reporting", path: "/admin/reporting" },
   { icon: FileSpreadsheet, label: "Bulk Import", path: "/admin/bulk-import" },
   { icon: ScanLine, label: "QR Scanner", path: "/admin/qr-scanner" },
+  { icon: ScanLine, label: "Barcode Station", path: "/admin/barcode-station" },
 ];
 
 const AppSidebar = () => {

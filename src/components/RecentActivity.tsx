@@ -119,7 +119,7 @@ const RecentActivity = () => {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{item.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  <span className={actionColors[item.action] || ""}>{item.action}</span>
+              <span className={actionColors[item.action as string] || ""}>{item.action as string}</span>
                   {" · "}
                   <span className="italic">{item.book}</span>
                 </p>

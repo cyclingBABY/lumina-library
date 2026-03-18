@@ -36,7 +36,7 @@ const StatsCards = () => {
   const cards = [
     { label: "Total Books", value: stats.totalBooks.toLocaleString(), icon: BookOpen, color: "text-primary" },
     { label: "Checked Out", value: stats.checkedOut.toLocaleString(), icon: BookCopy, color: "text-info" },
-    { label: "Active Patrons", value: stats.activePatrons.toLocaleString(), icon: Users, color: "text-accent" },
+    { label: "Active Users", value: stats.activeUsers.toLocaleString(), icon: Users, color: "text-accent" },
     { label: "Overdue Items", value: stats.overdueItems.toString(), icon: AlertTriangle, color: "text-destructive" },
   ];
 

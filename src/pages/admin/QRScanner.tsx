@@ -247,7 +247,7 @@ const QRScanner = () => {
 
                 <div className="pt-4 flex gap-2">
                   {action === "issue" ? (
-                    <Button className="w-full" onClick={issueBook} disabled={processing || scannedCopy.status !== "available" || !patronEmail}>
+                    <Button className="w-full" onClick={issueBook} disabled={processing || scannedCopy.status !== "available" || !userEmail}>
                       {processing ? "Processing…" : scannedCopy.status !== "available" ? `Cannot issue (${scannedCopy.status})` : "Issue This Copy"}
                     </Button>
                   ) : (

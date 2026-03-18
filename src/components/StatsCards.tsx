@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, BookCopy, Users, AlertTriangle } from "lucide-react";
 
 const StatsCards = () => {
-  const [stats, setStats] = useState({ totalBooks: 0, checkedOut: 0, activePatrons: 0, overdueItems: 0 });
+  const [stats, setStats] = useState({ totalBooks: 0, checkedOut: 0, activeUsers: 0, overdueItems: 0 });
 
   useEffect(() => {
     const fetchStats = async () => {

@@ -10,7 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Pencil, Trash2, ImagePlus, BookOpen, Monitor, Upload, Barcode, ScanLine, ArrowRightLeft } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, ImagePlus, BookOpen, Monitor, Upload, Barcode, ScanLine, ArrowRightLeft, RefreshCw } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import QRCode from "qrcode";
@@ -21,7 +22,7 @@ const emptyForm = {
   title: "", author: "", isbn: "", category: "General", publish_year: "",
   total_copies: 1, available_copies: 1, description: "",
   cover_color: "hsl(210 60% 50%)", status: "available",
-  shelf_location: "",
+  shelf_location: "", barcode: "", barcodeMode: "auto" as "auto" | "manual",
 };
 
 const categories = [
@@ -111,7 +112,7 @@ const Cataloging = () => {
   const saveMutation = useMutation({
     mutationFn: async (book: any) => {
       const isDigital = bookType === "digital";
-      const barcode = isDigital ? null : (editingBook?.barcode || generateBarcode());
+      const barcode = isDigital ? null : (editingBook?.barcode || book.barcode || generateBarcode());
 
       const payload: any = {
         title: book.title,
@@ -178,7 +179,7 @@ const Cataloging = () => {
 
   const openAdd = () => {
     setEditingBook(null);
-    setForm(emptyForm);
+    setForm({ ...emptyForm, barcode: generateBarcode() });
     setBookType("physical");
     setCoverFile(null);
     setCoverPreview(null);
@@ -371,12 +372,40 @@ const Cataloging = () => {
                   <div><Label>Total Copies</Label><Input type="number" min={1} value={form.total_copies} onChange={e => setForm({ ...form, total_copies: e.target.value })} /></div>
                   <div><Label>Shelf Location</Label><Input value={form.shelf_location || ""} onChange={e => setForm({ ...form, shelf_location: e.target.value })} placeholder="e.g. A-3-12" /></div>
                 </div>
-                <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-3 flex items-center gap-3">
-                  <Barcode className="w-5 h-5 text-primary" />
-                  <div>
-                    <p className="text-sm font-medium">Auto-generated Barcode</p>
-                    <p className="text-xs text-muted-foreground">A unique barcode & QR code per copy will be generated automatically when you save. Scanning the barcode shows all book info.</p>
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Barcode className="w-5 h-5 text-primary" />
+                      <Label className="text-sm font-semibold">Book Barcode</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">{form.barcodeMode === "auto" ? "Auto-generated" : "Manual / Scanner"}</span>
+                      <Switch
+                        checked={form.barcodeMode === "manual"}
+                        onCheckedChange={(checked) => setForm({ ...form, barcodeMode: checked ? "manual" : "auto" })}
+                      />
+                    </div>
                   </div>
+
+                  {form.barcodeMode === "auto" ? (
+                    <div className="flex items-center gap-2">
+                      <Input value={form.barcode || generateBarcode()} readOnly className="font-mono text-sm bg-background" />
+                      <Button type="button" variant="outline" size="icon" onClick={() => setForm({ ...form, barcode: generateBarcode() })} title="Regenerate">
+                        <RefreshCw className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <Input
+                        value={form.barcode}
+                        onChange={e => setForm({ ...form, barcode: e.target.value })}
+                        placeholder="Scan barcode with USB reader or type manually…"
+                        className="font-mono text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground">USB barcode scanners will auto-fill this field.</p>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground">QR codes per copy will also be generated automatically when you save.</p>
                 </div>
               </>
             )}

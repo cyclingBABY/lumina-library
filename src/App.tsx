@@ -33,7 +33,6 @@ import Reporting from "./pages/admin/Reporting";
 import BulkImport from "./pages/admin/BulkImport";
 import QRScanner from "./pages/admin/QRScanner";
 import BarcodeStation from "./pages/admin/BarcodeStation";
-import PhysicalBookScanner from "./pages/admin/PhysicalBookScanner";
 import PatronApproval from "./pages/admin/PatronApproval";
 import LecturerManagement from "./pages/admin/LecturerManagement";
 
@@ -81,7 +80,6 @@ const App = () => (
             <Route path="/admin/bulk-import" element={<ProtectedRoute requiredRole="admin"><BulkImport /></ProtectedRoute>} />
             <Route path="/admin/qr-scanner" element={<ProtectedRoute requiredRole="admin"><QRScanner /></ProtectedRoute>} />
             <Route path="/admin/barcode-station" element={<ProtectedRoute requiredRole="admin"><BarcodeStation /></ProtectedRoute>} />
-            <Route path="/admin/physical-scanner" element={<ProtectedRoute requiredRole="admin"><PhysicalBookScanner /></ProtectedRoute>} />
 
             {/* Lecturer routes */}
             <Route path="/lecturer/dashboard" element={<ProtectedRoute requiredRole="lecturer"><LecturerDashboard /></ProtectedRoute>} />

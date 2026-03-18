@@ -10,10 +10,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Pencil, Trash2, ImagePlus, BookOpen, Monitor, Upload, Barcode } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, ImagePlus, BookOpen, Monitor, Upload, Barcode, ScanLine, ArrowRightLeft } from "lucide-react";
 import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import QRCode from "qrcode";
+import ScanAndAddBook from "@/components/physical-scanner/ScanAndAddBook";
+import BorrowReturnScanner from "@/components/physical-scanner/BorrowReturnScanner";
 
 const emptyForm = {
   title: "", author: "", isbn: "", category: "General", publish_year: "",
@@ -222,7 +224,17 @@ const Cataloging = () => {
   });
 
   return (
-    <AdminLayout title="Cataloging / Metadata Entry" description="Manage physical and digital book records">
+    <AdminLayout title="Cataloging" description="Manage books, scan barcodes, and handle circulation">
+      <Tabs defaultValue="catalog" className="space-y-4">
+        <TabsList className="grid w-full max-w-lg grid-cols-3">
+          <TabsTrigger value="catalog" className="gap-2"><BookOpen className="w-4 h-4" />Book Catalog</TabsTrigger>
+          <TabsTrigger value="scanner" className="gap-2"><ScanLine className="w-4 h-4" />Scan & Add</TabsTrigger>
+          <TabsTrigger value="borrow" className="gap-2"><ArrowRightLeft className="w-4 h-4" />Borrow / Return</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="scanner"><ScanAndAddBook /></TabsContent>
+        <TabsContent value="borrow"><BorrowReturnScanner /></TabsContent>
+        <TabsContent value="catalog">
       <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -442,6 +454,8 @@ const Cataloging = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+        </TabsContent>
+      </Tabs>
     </AdminLayout>
   );
 };
